@@ -1,16 +1,16 @@
-# we put the srudent names in an array
+# we put the srudent names in a nested array, along with the month of their cohort as a symbol.
 students = [
-"Dr. Hannibal Lecter",
-"Darth Vadar",
-"Nurse Ratched",
-"Michael Corleone",
-"Alex DeLarge",
-"The Wicked Witch of the West",
-"Terminator",
-"Freddy Krueger",
-"The Joker",
-"Joffrey Baratheon",
-"Norman Bates"
+{name: "Dr. Hannibal Lecter",cohort: :november},
+{name: "Darth Vadar", cohort: :november},
+{name: "Nurse Ratched", cohort: :november},
+{name: "Michael Corleone", cohort: :november},
+{name: "Alex DeLarge",cohort: :november},
+{name: "The Wicked Witch of the West",cohort: :november},
+{name: "Terminator",cohort: :november},
+{name: "Freddy Krueger",cohort: :november},
+{name: "The Joker",cohort: :november},
+{name: "Joffrey Baratheon",cohort: :november},
+{name: "Norman Bates",cohort: :november}
 ]
 
 def print_header
@@ -18,15 +18,15 @@ puts "The students of the Villian Academy"
 puts "------------"
 end
 
-def print_names(names)
-names.each do |name|
-    puts name
+def print_names(students)
+students.each do |student|
+    puts "#{student[:name]} (#{student[:cohort]} cohort)" 
 end
 end
 #Here we print the total number of students in the academy
 
-def print_footer(names)
-print "Overall, we have #{names.count} great students"
+def print_footer(students)
+print "Overall, we have #{students.count} great students"
 end
 
 print_header
