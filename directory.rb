@@ -1,6 +1,5 @@
 @students = []
 def print_menu
-#1. print the menu and ask the user what it wants to do
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Save the student list"
@@ -16,7 +15,6 @@ def interactive_menu
 end
 
 def process(selection)
-  #3. do what the user has asked
   case selection
     when "1"
       students = input_students
@@ -25,7 +23,7 @@ def process(selection)
     when "3"
       save_students
     when "4"
-      load_students
+      try_load_students
     when "9"
       puts "Goodbye!"
       exit #this will cause the program to terminate
@@ -41,22 +39,16 @@ def input_students
 end
 
 def add_name
-    name = STDIN.gets.chomp
-    while !name.empty? do
+  name = STDIN.gets.chomp
+  while !name.empty? do
     add_students(name, :november)
     puts "Now we have #{@students.count} students"
     name = STDIN.gets.chomp
-    end
+  end
 end
 
 def add_students(name, cohort)
-@students << {name: name, cohort: cohort}
-end
-
-def load_students
-  puts "Enter filename"
-  filename = gets.chomp
-  try_load_students(filename)
+  @students << {name: name, cohort: cohort}
 end
 
 def show_students
@@ -78,38 +70,34 @@ def print_students_list
 end
 end
 
-#Here we print the total number of students in the academy
 def print_footer
   puts "Overall, we have #{@students.count} great students"
 end
 
 def save_students
-  #open the file for writing
   puts "Enter filename to save"
   filename = gets.chomp
     if File.exist?(filename) #check if the filename exists
-    save_file(filename)
-  else
-    filename = "students.csv"
-    save_file(filename)
-  end
+      save_file(filename)
+    else
+      filename = "students.csv"
+      save_file(filename)
+    end
 end
 
 def save_file(filename)
-  file = File.open("students.csv", "w")
-    #iterate over the array of students
-    @students.each do |student|
+  require 'csv'
+  CSV.open("/Users/waliahimanshu/Makers/student-directory/students.csv", "wb") do |csv|
+    csv << @students.each do |student|
       student_data = [student[:name], student[:cohort]]
-      csv_line = student_data.join (",")
-      file.puts csv_line
+      # file.write(student_data.join (","))
+      end
     end
-    file.close
-  puts "#{@students.count} students saved to the file."
-  end
-
+end
 
 def try_load_students(filename = "students.csv")
-  #filename = ARGV.first
+  puts "Enter filename"
+  filename = gets.chomp
   if File.exist?(filename) #check if the filename exists
     read_file(filename)
   else
@@ -119,12 +107,13 @@ def try_load_students(filename = "students.csv")
 end
 
 def read_file(filename)
-file = File.open(filename, "r")
-  file.readlines.each do |line|
-    name, cohort = line.chomp.split(",")
-     add_students(name, cohort.to_sym)
-  end
-  file.close
+  require 'csv'
+  load_array = []
+  load_array = CSV.foreach("/Users/waliahimanshu/Makers/student-directory/students.csv", "r") do |row|
+    name, cohort = row
+    load_array << row
+    add_students(name, cohort)
+end
   puts "#{@students.count} students loaded from the #{filename}"
 end
 
